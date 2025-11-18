@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutonomousDistance;
 import frc.robot.commands.AutonomousTime;
+import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -57,6 +58,7 @@ public class RobotContainer {
     // Default command is arcade drive. This will run unless another command
     // is scheduled over it.
     m_drivetrain.setDefaultCommand(getArcadeDriveCommand());
+    // m_drivetrain.setDefaultCommand(getTankDriveCommand());
 
     // Example of how to use the onboard IO
     Trigger userButton = new Trigger(m_onboardIO::getUserButtonPressed);
@@ -64,15 +66,10 @@ public class RobotContainer {
         .onTrue(new PrintCommand("USER Button Pressed"))
         .onFalse(new PrintCommand("USER Button Released"));
 
-    JoystickButton joystickAButton = new JoystickButton(m_controller, 1);
+    JoystickButton joystickAButton = new JoystickButton(m_controller, 6);
     joystickAButton
-        .onTrue(new InstantCommand(() -> m_arm.setAngle(45.0), m_arm))
-        .onFalse(new InstantCommand(() -> m_arm.setAngle(0.0), m_arm));
-
-    JoystickButton joystickBButton = new JoystickButton(m_controller, 2);
-    joystickBButton
-        .onTrue(new InstantCommand(() -> m_arm.setAngle(90.0), m_arm))
-        .onFalse(new InstantCommand(() -> m_arm.setAngle(0.0), m_arm));
+        .onTrue(new InstantCommand(() -> m_arm.setAngle(180.0), m_arm))
+        .onFalse(new InstantCommand(() -> m_arm.setAngle(90.0), m_arm));
 
     // Setup SmartDashboard options
     m_chooser.setDefaultOption("Auto Routine Distance", new AutonomousDistance(m_drivetrain));
@@ -96,11 +93,12 @@ public class RobotContainer {
    */
   public Command getArcadeDriveCommand() {
     return new ArcadeDrive(
-        m_drivetrain, () -> -m_controller.getRawAxis(1), () -> -m_controller.getRawAxis(2));
+        m_drivetrain, () -> -m_controller.getRawAxis(1), () -> -m_controller.getRawAxis(0));
   }
-  public Command getArcadeDriveCommand2() {
-    Supplier<Double> m_xaxisSpeedSupplier = () -> -m_controller.getRawAxis(1);
-    Supplier<Double> m_zaxisRotateSupplier = () -> -m_controller.getRawAxis(2);
-    return new InstantCommand(() -> m_drivetrain.arcadeDrive(m_xaxisSpeedSupplier.get(), m_zaxisRotateSupplier.get()), m_drivetrain);
+
+  public Command getTankDriveCommand() {
+    return new TankDrive(
+        m_drivetrain, () -> -m_controller.getRawAxis(1), () -> -m_controller.getRawAxis(5));
   }
+  
 }
