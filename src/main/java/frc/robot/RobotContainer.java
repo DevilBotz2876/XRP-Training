@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.ArcadeDrive;
 import frc.robot.commands.AutonomousDistance;
 import frc.robot.commands.AutonomousTime;
+import frc.robot.commands.TankDrive;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drivetrain;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -56,7 +57,7 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Default command is arcade drive. This will run unless another command
     // is scheduled over it.
-    m_drivetrain.setDefaultCommand(getArcadeDriveCommand());
+    m_drivetrain.setDefaultCommand(getTankDriveCommand());
 
     // Example of how to use the onboard IO
     Trigger userButton = new Trigger(m_onboardIO::getUserButtonPressed);
@@ -103,4 +104,7 @@ public class RobotContainer {
     Supplier<Double> m_zaxisRotateSupplier = () -> -m_controller.getRawAxis(2);
     return new InstantCommand(() -> m_drivetrain.arcadeDrive(m_xaxisSpeedSupplier.get(), m_zaxisRotateSupplier.get()), m_drivetrain);
   }
+  public Command getTankDriveCommand(){
+    return new TankDrive(m_drivetrain, () -> -m_controller.getRawAxis(1), () -> -m_controller.getRawAxis(5));
+   }
 }
