@@ -57,7 +57,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
     // Default command is arcade drive. This will run unless another command
     // is scheduled over it.
+    JoystickButton XButton = new JoystickButton(m_controller, 3);
     m_drivetrain.setDefaultCommand(getTankDriveCommand());
+    XButton.toggleOnTrue(getArcadeDriveCommand());
+
 
     // Example of how to use the onboard IO
     Trigger userButton = new Trigger(m_onboardIO::getUserButtonPressed);
